@@ -6,13 +6,13 @@ fs.readFile('README.md', 'utf-8', (err, data) ->
 		console.log(err)
 		return
 
-	data = data.replace(/```javascript([^`]+)```/g, (match, js) ->
+	data = data.replace(/\n([ \t]*)```javascript([^`]+)```/g, (match, indent, js) ->
 		try
-			"```coffeescript\n#{js2coffee.build(js).code}\n```"
+			"#{indent}```coffeescript\n#{js2coffee.build(js).code}\n#{indent}```"
 		catch error
 			try
 				# see if a closing brace fixes the syntax issue
-				"```coffeescript\n#{js2coffee.build(js + '}').code}\n```"
+				"#{indent}```coffeescript\n#{js2coffee.build(js + '}').code}\n#{indent}```"
 			catch error
 				# just return the original javascript, then
 				match

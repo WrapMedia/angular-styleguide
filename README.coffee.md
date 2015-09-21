@@ -64,7 +64,6 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
   - Define 1 component per file.
 
   The following example defines the `app` module and its dependencies, defines a controller, and defines a factory all in the same file.
-
   ```coffeescript
 ### avoid ###
 
@@ -74,18 +73,16 @@ someFactory = ->
 
 angular.module('app', [ 'ngRoute' ]).controller('SomeController', SomeController).factory 'someFactory', someFactory
 
-```
+  ```
 
   The same components are now separated into their own files.
-
   ```coffeescript
 ### recommended ###
 
 # app.module.js
 angular.module 'app', [ 'ngRoute' ]
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -95,8 +92,7 @@ SomeController = ->
 
 angular.module('app').controller 'SomeController', SomeController
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -106,7 +102,7 @@ someFactory = ->
 
 angular.module('app').factory 'someFactory', someFactory
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -119,7 +115,6 @@ angular.module('app').factory 'someFactory', someFactory
   *Why?*: An IIFE removes variables from the global scope. This helps prevent variables and function declarations from living longer than expected in the global scope, which also helps avoid variable collisions.
 
   *Why?*: When your code is minified and bundled into a single file for deployment to a production server, you could have collisions of variables and many global variables. An IIFE protects you against both of these by providing variable scope for each file.
-
   ```coffeescript
 ### avoid ###
 
@@ -136,8 +131,7 @@ angular.module('app').factory 'logger', logger
 # storage.js
 angular.module('app').factory 'storage', storage
 
-```
-
+  ```
   ```coffeescript
 ###*
 # recommended
@@ -162,7 +156,7 @@ do ->
   angular.module('app').factory 'storage', storage
   return
 
-```
+  ```
 
   - Note: For brevity only, the rest of the examples in this guide may omit the IIFE syntax.
 
@@ -185,7 +179,6 @@ do ->
   - Declare modules without a variable using the setter syntax.
 
   *Why?*: With 1 component per file, there is rarely a need to introduce a variable for the module.
-
   ```coffeescript
 ### avoid ###
 
@@ -196,10 +189,9 @@ app = angular.module('app', [
   'app.dashboard'
 ])
 
-```
+  ```
 
   Instead use the simple setter syntax.
-
   ```coffeescript
 ### recommended ###
 
@@ -210,7 +202,7 @@ angular.module 'app', [
   'app.dashboard'
 ]
 
-```
+  ```
 
 ### Getters
 ###### [Style [Y022](#style-y022)]
@@ -218,7 +210,6 @@ angular.module 'app', [
   - When using a module, avoid using a variable and instead use chaining with the getter syntax.
 
   *Why?*: This produces more readable code and avoids variable collisions or leaks.
-
   ```coffeescript
 ### avoid ###
 
@@ -228,8 +219,7 @@ SomeController = ->
 
 app.controller 'SomeController', SomeController
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -237,7 +227,7 @@ SomeController = ->
 
 angular.module('app').controller 'SomeController', SomeController
 
-```
+  ```
 
 ### Setting vs Getting
 ###### [Style [Y023](#style-y023)]
@@ -245,7 +235,6 @@ angular.module('app').controller 'SomeController', SomeController
   - Only set once and get for all other instances.
 
   *Why?*: A module should only be created once, then retrieved from that point and after.
-
   ```coffeescript
 ### recommended ###
 
@@ -254,7 +243,7 @@ angular.module 'app', []
 # to get a module
 angular.module 'app'
 
-```
+  ```
 
 ### Named vs Anonymous Functions
 ###### [Style [Y024](#style-y024)]
@@ -262,15 +251,13 @@ angular.module 'app'
   - Use named functions instead of passing an anonymous function in as a callback.
 
   *Why?*: This produces more readable code, is much easier to debug, and reduces the amount of nested callback code.
-
   ```coffeescript
 ### avoid ###
 
 angular.module('app').controller('Dashboard', ->
 ).factory 'logger', ->
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -280,8 +267,7 @@ Dashboard = ->
 
 angular.module('app').controller 'Dashboard', Dashboard
 
-```
-
+  ```
   ```coffeescript
 # logger.js
 
@@ -289,7 +275,7 @@ logger = ->
 
 angular.module('app').factory 'logger', logger
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -330,7 +316,6 @@ angular.module('app').factory 'logger', logger
   *Why?*: `controllerAs` is syntactic sugar over `$scope`. You can still bind to the View and still access `$scope` methods.
 
   *Why?*: Helps avoid the temptation of using `$scope` methods inside a controller when it may otherwise be better to avoid them or move the method to a factory, and reference them from the controller. Consider using `$scope` in a controller only when needed. For example when publishing and subscribing events using [`$emit`](https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$emit), [`$broadcast`](https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$broadcast), or [`$on`](https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$on) consider moving these uses to a factory and invoke from the controller.
-
   ```coffeescript
 ### avoid ###
 
@@ -341,8 +326,7 @@ Customer = ($scope) ->
 
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended - but see next section ###
 
@@ -353,7 +337,7 @@ Customer = ->
 
   return
 
-```
+  ```
 
 ### controllerAs with vm
 ###### [Style [Y032](#style-y032)]
@@ -361,7 +345,6 @@ Customer = ->
   - Use a capture variable for `this` when using the `controllerAs` syntax. Choose a consistent variable name such as `vm`, which stands for ViewModel.
 
   *Why?*: The `this` keyword is contextual and when used within a function inside a controller may change its context. Capturing the context of `this` avoids encountering this problem.
-
   ```coffeescript
 ### avoid ###
 
@@ -372,8 +355,7 @@ Customer = ->
 
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -385,23 +367,21 @@ Customer = ->
 
   return
 
-```
+  ```
 
   Note: You can avoid any [jshint](http://www.jshint.com/) warnings by placing the comment above the line of code. However it is not needed when the function is named using UpperCasing, as this convention means it is a constructor function, which is what a controller is in Angular.
-
   ```coffeescript
 ### jshint validthis: true ###
 
 vm = this
 
-```
+  ```
 
   Note: When creating watches in a controller using `controller as`, you can watch the `vm.*` member using the following syntax. (Create watches with caution as they add more load to the digest cycle.)
 
   ```html
   <input ng-model="vm.title"/>
   ```
-
   ```coffeescript
 SomeController = ($scope, $log) ->
   vm = this
@@ -412,7 +392,7 @@ SomeController = ($scope, $log) ->
     return
   return
 
-```
+  ```
 
 ### Bindable Members Up Top
 ###### [Style [Y033](#style-y033)]
@@ -422,7 +402,6 @@ SomeController = ($scope, $log) ->
     *Why?*: Placing bindable members at the top makes it easy to read and helps you instantly identify which members of the controller can be bound and used in the View.
 
     *Why?*: Setting anonymous functions in-line can be easy, but when those functions are more than 1 line of code they can reduce the readability. Defining the functions below the bindable members (the functions will be hoisted) moves the implementation details down, keeps the bindable members up top, and makes it easier to read.
-
   ```coffeescript
 ### avoid ###
 
@@ -451,8 +430,7 @@ Sessions = ->
   vm.title = 'Sessions'
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -485,12 +463,11 @@ Sessions = ->
   vm.title = 'Sessions'
   return
 
-```
+  ```
 
     ![Controller Using "Above the Fold"](https://raw.githubusercontent.com/johnpapa/angular-styleguide/master/assets/above-the-fold-1.png)
 
   Note: If the function is a 1 liner consider keeping it right up top, as long as readability is not affected.
-
   ```coffeescript
 ### avoid ###
 
@@ -515,8 +492,7 @@ Sessions = (data) ->
   vm.title = 'Sessions'
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -530,7 +506,7 @@ Sessions = (sessionDataService) ->
   vm.title = 'Sessions'
   return
 
-```
+  ```
 
 ### Function Declarations to Hide Implementation Details
 ###### [Style [Y034](#style-y034)]
@@ -546,7 +522,6 @@ Sessions = (sessionDataService) ->
     *Why?*: You never have to worry with function declarations that moving `var a` before `var b` will break your code because `a` depends on `b`.
 
     *Why?*: Order is critical with function expressions
-
   ```coffeescript
 ###*
 # avoid
@@ -572,10 +547,9 @@ Avengers = (avengersService, logger) ->
   activate()
   return
 
-```
+  ```
 
   Notice that the important stuff is scattered in the preceding example. In the example below, notice that the important stuff is up top. For example, the members bound to the controller such as `vm.avengers` and `vm.title`. The implementation details are down below. This is just easier to read.
-
   ```coffeescript
 ###
 # recommend
@@ -602,7 +576,7 @@ Avengers = (avengersService, logger) ->
   activate()
   return
 
-```
+  ```
 
 ### Defer Controller Logic to Services
 ###### [Style [Y035](#style-y035)]
@@ -616,7 +590,6 @@ Avengers = (avengersService, logger) ->
     *Why?*: Removes dependencies and hides implementation details from the controller.
 
     *Why?*: Keeps the controller slim, trim, and focused.
-
   ```coffeescript
 ### avoid ###
 
@@ -646,8 +619,7 @@ Order = ($http, $q, config, userInfo) ->
   vm.total = 0
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -665,7 +637,7 @@ Order = (creditService) ->
   vm.total = 0
   return
 
-```
+  ```
 
 ### Keep Controllers Focused
 ###### [Style [Y037](#style-y037)]
@@ -682,7 +654,6 @@ Order = (creditService) ->
     Note: If a View is loaded via another means besides a route, then use the `ng-controller="Avengers as vm"` syntax.
 
     *Why?*: Pairing the controller in the route allows different routes to invoke different pairs of controllers and views. When controllers are assigned in the view using [`ng-controller`](https://docs.angularjs.org/api/ng/directive/ngController), that view is always associated with the same controller.
-
  ```coffeescript
 ### avoid - when using with a route and dynamic pairing is desired ###
 
@@ -694,14 +665,13 @@ config = ($routeProvider) ->
 
 angular.module('app').config config
 
-```
+ ```
 
   ```html
   <!-- avengers.html -->
   <div ng-controller="Avengers as vm">
   </div>
   ```
-
   ```coffeescript
 ### recommended ###
 
@@ -716,7 +686,7 @@ config = ($routeProvider) ->
 
 angular.module('app').config config
 
-```
+  ```
 
   ```html
   <!-- avengers.html -->
@@ -734,7 +704,6 @@ angular.module('app').config config
   - Services are instantiated with the `new` keyword, use `this` for public methods and variables. Since these are so similar to factories, use a factory instead for consistency.
 
     Note: [All Angular services are singletons](https://docs.angularjs.org/guide/services). This means that there is only one instance of a given service per injector.
-
   ```coffeescript
 # service
 
@@ -750,8 +719,7 @@ logger = ->
 
 angular.module('app').service 'logger', logger
 
-```
-
+  ```
   ```coffeescript
 # factory
 
@@ -765,7 +733,7 @@ logger = ->
 
 angular.module('app').factory 'logger', logger
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -793,7 +761,6 @@ angular.module('app').factory 'logger', logger
     *Why?*: This is especially helpful when the file gets longer as it helps avoid the need to scroll to see what is exposed.
 
     *Why?*: Setting functions as you go can be easy, but when those functions are more than 1 line of code they can reduce the readability and cause more scrolling. Defining the callable interface via the returned service moves the implementation details down, keeps the callable interface up top, and makes it easier to read.
-
   ```coffeescript
 ### avoid ###
 
@@ -818,8 +785,7 @@ dataService = ->
     validate: validate
   }
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -845,7 +811,7 @@ dataService = ->
 
   service
 
-```
+  ```
 
   This way bindings are mirrored across the host object, primitive values cannot update alone using the revealing module pattern.
 
@@ -865,7 +831,6 @@ dataService = ->
     *Why?*: You never have to worry with function declarations that moving `var a` before `var b` will break your code because `a` depends on `b`.
 
     *Why?*: Order is critical with function expressions
-
   ```coffeescript
 ###*
 # avoid
@@ -903,8 +868,7 @@ dataservice = ($http, $location, $q, exception, logger) ->
     ready: ready
   service
 
-```
-
+  ```
   ```coffeescript
 ###*
 # recommended
@@ -944,7 +908,7 @@ dataservice = ($http, $location, $q, exception, logger) ->
 
   service
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -960,7 +924,6 @@ dataservice = ($http, $location, $q, exception, logger) ->
     *Why?*: This makes it easier to test (mock or real) the data calls when testing a controller that uses a data service.
 
     *Why?*: Data service implementation may have very specific code to handle the data repository. This may include headers, how to talk to the data, or other services such as `$http`. Separating the logic into a data service encapsulates this logic in a single place hiding the implementation from the outside consumers (perhaps a controller), also making it easier to change the implementation.
-
   ```coffeescript
 ### recommended ###
 
@@ -987,10 +950,9 @@ dataservice.$inject = [
   'logger'
 ]
 
-```
+  ```
 
     Note: The data service is called from consumers, such as a controller, hiding the implementation from the consumers, as shown below.
-
   ```coffeescript
 ### recommended ###
 
@@ -1019,7 +981,7 @@ Avengers.$inject = [
   'logger'
 ]
 
-```
+  ```
 
 ### Return a Promise from Data Calls
 ###### [Style [Y061](#style-y061)]
@@ -1027,7 +989,6 @@ Avengers.$inject = [
   - When calling a data service that returns a promise such as `$http`, return a promise in your calling function too.
 
     *Why?*: You can chain the promises together and take further action after the data call completes and resolves or rejects the promise.
-
   ```coffeescript
 ### recommended ###
 
@@ -1069,7 +1030,7 @@ getAvengers = ->
 
 activate()
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -1084,7 +1045,6 @@ activate()
     *Why?*: One directive per file is easy to maintain.
 
     > Note: "**Best Practice**: Directives should clean up after themselves. You can use `element.on('$destroy', ...)` or `scope.$on('$destroy', ...)` to run a clean-up function when the directive is removed" ... from the Angular documentation.
-
   ```coffeescript
 ### avoid ###
 
@@ -1110,8 +1070,7 @@ sharedSpinner = ->
 
 angular.module('app.widgets').directive('orderCalendarRange', orderCalendarRange).directive('salesCustomerInfo', salesCustomerInfo).directive 'sharedSpinner', sharedSpinner
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -1130,8 +1089,7 @@ orderCalendarRange = ->
 
 angular.module('sales.order').directive 'acmeOrderCalendarRange', orderCalendarRange
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -1150,8 +1108,7 @@ salesCustomerInfo = ->
 
 angular.module('sales.widgets').directive 'acmeSalesCustomerInfo', salesCustomerInfo
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -1170,7 +1127,7 @@ sharedSpinner = ->
 
 angular.module('shared.widgets').directive 'acmeSharedSpinner', sharedSpinner
 
-```
+  ```
 
     Note: There are many naming options for directives, especially since they can be used in narrow or wide scopes. Choose one that makes the directive and its file name distinct and clear. Some examples are below, but see the [Naming](#naming) section for more recommendations.
 
@@ -1205,7 +1162,6 @@ angular.module('shared.widgets').directive 'acmeSharedSpinner', sharedSpinner
   <!-- avoid -->
   <div class="my-calendar-range"></div>
   ```
-
   ```coffeescript
 ### avoid ###
 
@@ -1225,14 +1181,13 @@ myCalendarRange = ->
 
 angular.module('app.widgets').directive 'myCalendarRange', myCalendarRange
 
-```
+  ```
 
   ```html
   <!-- recommended -->
   <my-calendar-range></my-calendar-range>
   <div my-calendar-range></div>
   ```
-
   ```coffeescript
 ### recommended ###
 
@@ -1252,7 +1207,7 @@ myCalendarRange = ->
 
 angular.module('app.widgets').directive 'myCalendarRange', myCalendarRange
 
-```
+  ```
 
 ### Directives and ControllerAs
 ###### [Style [Y075](#style-y075)]
@@ -1270,7 +1225,6 @@ angular.module('app.widgets').directive 'myCalendarRange', myCalendarRange
   ```html
   <div my-example max="77"></div>
   ```
-
   ```coffeescript
 myExample = ->
   directive = 
@@ -1304,7 +1258,7 @@ ExampleController = ($scope) ->
 angular.module('app').directive 'myExample', myExample
 ExampleController.$inject = [ '$scope' ]
 
-```
+  ```
 
   ```html
   <!-- example.directive.html -->
@@ -1314,7 +1268,6 @@ ExampleController.$inject = [ '$scope' ]
   ```
 
     Note: You can also name the controller when you inject it into the link function and access directive attributes as properties of the controller.
-
   ```coffeescript
 # Alternative to above example
 
@@ -1325,7 +1278,7 @@ linkFunc = (scope, el, attr, vm) ->
   console.log 'LINK: vm.max = %s', vm.max
   return
 
-```
+  ```
 
 ###### [Style [Y076](#style-y076)]
 
@@ -1338,7 +1291,6 @@ linkFunc = (scope, el, attr, vm) ->
   ```html
   <div my-example max="77"></div>
   ```
-
   ```coffeescript
 myExample = ->
   directive = 
@@ -1359,7 +1311,7 @@ ExampleController = ->
 
 angular.module('app').directive 'myExample', myExample
 
-```
+  ```
 
   ```html
   <!-- example.directive.html -->
@@ -1381,7 +1333,6 @@ angular.module('app').directive 'myExample', myExample
     *Why?*: The controller `activate` makes it convenient to re-use the logic for a refresh for the controller/View, keeps the logic together, gets the user to the View faster, makes animations easy on the `ng-view` or `ui-view`, and feels snappier to the user.
 
     Note: If you need to conditionally cancel the route before you start using the controller, use a [route resolve](#style-y081) instead.
-
   ```coffeescript
 ### avoid ###
 
@@ -1394,8 +1345,7 @@ Avengers = (dataservice) ->
     vm.avengers
   return
 
-```
-
+  ```
   ```coffeescript
 ### recommended ###
 
@@ -1413,7 +1363,7 @@ Avengers = (dataservice) ->
   activate()
   return
 
-```
+  ```
 
 ### Route Resolve Promises
 ###### [Style [Y081](#style-y081)]
@@ -1427,7 +1377,6 @@ Avengers = (dataservice) ->
     *Why?*: The code executes after the route and in the controller’s activate function. The View starts to load right away. Data binding kicks in when the activate promise resolves. A “busy” animation can be shown during the view transition (via `ng-view` or `ui-view`)
 
     Note: The code executes before the route via a promise. Rejecting the promise cancels the route. Resolve makes the new view wait for the route to resolve. A “busy” animation can be shown before the resolve and through the view transition. If you want to get to the View faster and do not require a checkpoint to decide if you can get to the View, consider the [controller `activate` technique](#style-y080) instead.
-
   ```coffeescript
 ### avoid ###
 
@@ -1443,8 +1392,7 @@ Avengers = (movieService) ->
 
 angular.module('app').controller 'Avengers', Avengers
 
-```
-
+  ```
   ```coffeescript
 ### better ###
 
@@ -1469,10 +1417,9 @@ angular.module('app').config config
 angular.module('app').controller 'Avengers', Avengers
 Avengers.$inject = [ 'moviesPrepService' ]
 
-```
+  ```
 
     Note: The example below shows the route resolve points to a named function, which is easier to debug and easier to handle dependency injection.
-
   ```coffeescript
 ### even better ###
 
@@ -1499,7 +1446,7 @@ angular.module('app').config config
 angular.module('app').controller 'Avengers', Avengers
 Avengers.$inject = [ 'moviesPrepService' ]
 
-```
+  ```
     Note: The code example's dependency on `movieService` is not minification safe on its own. For details on how to make this code minification safe, see the sections on [dependency injection](#manual-annotating-for-dependency-injection) and on [minification and annotation](#minification-and-annotation).
 
 **[Back to top](#table-of-contents)**
@@ -1512,7 +1459,6 @@ Avengers.$inject = [ 'moviesPrepService' ]
   - Avoid using the shortcut syntax of declaring dependencies without using a minification-safe approach.
 
     *Why?*: The parameters to the component (e.g. controller, factory, etc) will be converted to mangled variables. For example, `common` and `dataservice` may become `a` or `b` and not be found by Angular.
-
     ```coffeescript
 ### avoid - not minification-safe###
 
@@ -1520,10 +1466,9 @@ Dashboard = (common, dataservice) ->
 
 angular.module('app').controller 'Dashboard', Dashboard
 
-```
+    ```
 
     This code may produce mangled variables when minified and thus cause runtime errors.
-
     ```coffeescript
 ### avoid - not minification-safe###
 
@@ -1531,7 +1476,7 @@ d = (a, b) ->
 
 angular.module('app').controller 'Dashboard', d
 
-```
+    ```
 
 ### Manually Identify Dependencies
 ###### [Style [Y091](#style-y091)]
@@ -1543,7 +1488,6 @@ angular.module('app').controller 'Dashboard', d
     *Why?*: This safeguards your dependencies from being vulnerable to minification issues when parameters may be mangled. For example, `common` and `dataservice` may become `a` or `b` and not be found by Angular.
 
     *Why?*: Avoid creating in-line dependencies as long lists can be difficult to read in the array. Also it can be confusing that the array is a series of strings while the last item is the component's function.
-
     ```coffeescript
 ### avoid ###
 
@@ -1555,8 +1499,7 @@ angular.module('app').controller 'Dashboard', [
   ($location, $routeParams, common, dataservice) ->
 ]
 
-```
-
+    ```
     ```coffeescript
 ### avoid ###
 
@@ -1570,8 +1513,7 @@ angular.module('app').controller 'Dashboard', [
   Dashboard
 ]
 
-```
-
+    ```
     ```coffeescript
 ### recommended ###
 
@@ -1585,10 +1527,9 @@ Dashboard.$inject = [
   'dataservice'
 ]
 
-```
+    ```
 
     Note: When your function is below a return statement the `$inject` may be unreachable (this may happen in a directive). You can solve this by moving the Controller outside of the directive.
-
     ```coffeescript
 ### avoid ###
 
@@ -1606,8 +1547,7 @@ outer = ->
   DashboardPanelController.$inject = [ 'logger' ]
   return
 
-```
-
+    ```
     ```coffeescript
 ### recommended ###
 
@@ -1623,7 +1563,7 @@ DashboardPanelController = (logger) ->
 
 DashboardPanelController.$inject = [ 'logger' ]
 
-```
+    ```
 
 ### Manually Identify Route Resolver Dependencies
 ###### [Style [Y092](#style-y092)]
@@ -1633,7 +1573,6 @@ DashboardPanelController.$inject = [ 'logger' ]
     *Why?*: This technique breaks out the anonymous function for the route resolver, making it easier to read.
 
     *Why?*: An `$inject` statement can easily precede the resolver to handle making any dependencies minification safe.
-
     ```coffeescript
 ### recommended ###
 
@@ -1650,7 +1589,7 @@ moviesPrepService = (movieService) ->
 
 moviesPrepService.$inject = [ 'movieService' ]
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -1668,7 +1607,6 @@ moviesPrepService.$inject = [ 'movieService' ]
     >I prefer Gulp as I feel it is easier to write, to read, and to debug.
 
     The following code is not using minification safe dependencies.
-
     ```coffeescript
 ### @ngInject ###
 
@@ -1686,10 +1624,9 @@ Avengers = (storage, avengerService) ->
 
 angular.module('app').controller 'Avengers', Avengers
 
-```
+    ```
 
     When the above code is run through ng-annotate it will produce the following output with the `$inject` annotation and become minification-safe.
-
     ```coffeescript
 ### @ngInject ###
 
@@ -1711,12 +1648,11 @@ Avengers.$inject = [
   'avengerService'
 ]
 
-```
+    ```
 
     Note: If `ng-annotate` detects injection has already been made (e.g. `@ngInject` was detected), it will not duplicate the `$inject` code.
 
     Note: When using a route resolver you can prefix the resolver's function with `/* @ngInject */` and it will produce properly annotated code, keeping any injected dependencies minification safe.
-
     ```coffeescript
 # Using @ngInject annotations
 
@@ -1729,7 +1665,7 @@ config = ($routeProvider) ->
       movieService.getMovies()
   return
 
-```
+    ```
 
     > Note: Starting from Angular 1.3 you can use the [`ngApp`](https://docs.angularjs.org/api/ng/directive/ngApp) directive's `ngStrictDi` parameter to detect any potentially missing minification safe dependencies. When present the injector will be created in "strict-di" mode causing the application to fail to invoke functions which do not use explicit function annotation (these may not be minification safe). Debugging info will be logged to the console to help track down the offending code. I prefer to only use `ng-strict-di` for debugging purposes only.
     `<body ng-app="APP" ng-strict-di>`
@@ -1742,13 +1678,12 @@ config = ($routeProvider) ->
     *Why?*: ng-annotate will catch most dependencies, but it sometimes requires hints using the `/* @ngInject */` syntax.
 
     The following code is an example of a gulp task using ngAnnotate
-
     ```coffeescript
 gulp.task 'js', [ 'jshint' ], ->
   source = pkg.paths.js
   gulp.src(source).pipe(sourcemaps.init()).pipe(concat('all.min.js', newLine: ';')).pipe(ngAnnotate(add: true)).pipe(bytediff.start()).pipe(uglify(mangle: true)).pipe(bytediff.stop()).pipe(sourcemaps.write('./')).pipe gulp.dest(pkg.paths.dev)
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -1762,7 +1697,6 @@ gulp.task 'js', [ 'jshint' ], ->
     *Why?*: Provides a consistent way to handle uncaught Angular exceptions for development-time or run-time.
 
     Note: Another option is to override the service instead of using a decorator. This is a fine option, but if you want to keep the default behavior and extend it a decorator is recommended.
-
     ```coffeescript
 ### recommended ###
 
@@ -1794,7 +1728,7 @@ extendExceptionHandler.$inject = [
   'toastr'
 ]
 
-```
+    ```
 
 ### Exception Catchers
 ###### [Style [Y111](#style-y111)]
@@ -1804,7 +1738,6 @@ extendExceptionHandler.$inject = [
     *Why?*: Provides a consistent way to catch exceptions that may be thrown in your code (e.g. during XHR calls or promise failures).
 
     Note: The exception catcher is good for catching and reacting to specific exceptions from calls that you know may throw one. For example, when making an XHR call to retrieve data from a remote web service and you want to catch any exceptions from that service and react uniquely.
-
     ```coffeescript
 ### recommended ###
 
@@ -1821,7 +1754,7 @@ exception = (logger) ->
 angular.module('blocks.exception').factory 'exception', exception
 exception.$inject = [ 'logger' ]
 
-```
+    ```
 
 ### Route Errors
 ###### [Style [Y112](#style-y112)]
@@ -1831,7 +1764,6 @@ exception.$inject = [ 'logger' ]
     *Why?*: Provides a consistent way to handle all routing errors.
 
     *Why?*: Potentially provides a better user experience if a routing error occurs and you route them to a friendly screen with more details or recovery options.
-
     ```coffeescript
 ### recommended ###
 
@@ -1867,7 +1799,7 @@ handleRoutingErrors = ->
     return
   return
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -1892,7 +1824,6 @@ handleRoutingErrors = ->
     *Why?*: Provides a consistent way to quickly identify components.
 
     *Why?*: Provides pattern matching for any automated tasks.
-
     ```coffeescript
 ###*
 # common options
@@ -1907,8 +1838,7 @@ logger.js
 logger.service.js
 loggerService.js
 
-```
-
+    ```
     ```coffeescript
 ###*
 # recommended
@@ -1933,10 +1863,9 @@ avengers.config.js
 avenger - (profile.directive.js)
 avenger - (profile.directive.spec.js)
 
-```
+    ```
 
   Note: Another common convention is naming controller files without the word `controller` in the file name such as `avengers.js` instead of `avengers.controller.js`. All other conventions still hold using a suffix of the type. Controllers are the most common type of component so this just saves typing and is still easily identifiable. I recommend you choose 1 convention and be consistent for your team. My preference is `avengers.controller.js`.
-
     ```coffeescript
 ###*
 # recommended
@@ -1946,7 +1875,7 @@ avenger - (profile.directive.spec.js)
 avengers.js
 avengers.spec.js
 
-```
+    ```
 
 ### Test File Names
 ###### [Style [Y122](#style-y122)]
@@ -1956,7 +1885,6 @@ avengers.spec.js
     *Why?*: Provides a consistent way to quickly identify components.
 
     *Why?*: Provides pattern matching for [karma](http://karma-runner.github.io/) or other test runners.
-
     ```coffeescript
 ###*
 # recommended
@@ -1967,7 +1895,7 @@ logger.service.spec.js
 avengers.routes.spec.js
 avenger - (profile.directive.spec.js)
 
-```
+    ```
 
 ### Controller Names
 ###### [Style [Y123](#style-y123)]
@@ -1977,7 +1905,6 @@ avenger - (profile.directive.spec.js)
     *Why?*: Provides a consistent way to quickly identify and reference controllers.
 
     *Why?*: UpperCamelCase is conventional for identifying object that can be instantiated using a constructor.
-
     ```coffeescript
 ###*
 # recommended
@@ -1989,7 +1916,7 @@ HeroAvengersController = ->
 
 angular.module.controller 'HeroAvengersController', HeroAvengersController
 
-```
+    ```
 
 ### Controller Name Suffix
 ###### [Style [Y124](#style-y124)]
@@ -1997,7 +1924,6 @@ angular.module.controller 'HeroAvengersController', HeroAvengersController
   - Append the controller name with the suffix `Controller`.
 
     *Why?*: The `Controller` suffix is more commonly used and is more explicitly descriptive.
-
     ```coffeescript
 ###*
 # recommended
@@ -2009,7 +1935,7 @@ AvengersController = ->
 
 angular.module.controller 'AvengersController', AvengersController
 
-```
+    ```
 
 ### Factory and Service Names
 ###### [Style [Y125](#style-y125)]
@@ -2023,7 +1949,6 @@ angular.module.controller 'AvengersController', AvengersController
     *Why?*: Clear service names such as `logger` do not require a suffix.
 
     *Why?*: Service names such as `avengers` are nouns and require a suffix and should be named `avengersService`.
-
     ```coffeescript
 ###*
 # recommended
@@ -2035,8 +1960,7 @@ logger = ->
 
 angular.module.factory 'logger', logger
 
-```
-
+    ```
     ```coffeescript
 ###*
 # recommended
@@ -2052,7 +1976,7 @@ angular.module.factory 'creditService', creditService
 # customer.service.js
 angular.module.service 'customersService', customersService
 
-```
+    ```
 
 ### Directive Component Names
 ###### [Style [Y126](#style-y126)]
@@ -2060,7 +1984,6 @@ angular.module.service 'customersService', customersService
   - Use consistent names for all directives using camel-case. Use a short prefix to describe the area that the directives belong (some example are company prefix or project prefix).
 
     *Why?*: Provides a consistent way to quickly identify and reference components.
-
     ```coffeescript
 ###*
 # recommended
@@ -2073,7 +1996,7 @@ xxAvengerProfile = ->
 
 angular.module.directive 'xxAvengerProfile', xxAvengerProfile
 
-```
+    ```
 
 ### Modules
 ###### [Style [Y127](#style-y127)]
@@ -2191,7 +2114,6 @@ angular.module.directive 'xxAvengerProfile', xxAvengerProfile
     *Why?*: Helps reduce the app from becoming cluttered through organizing the content and keeping them aligned with the LIFT guidelines.
 
     *Why?*: When there are a lot of files (10+) locating them is easier with a consistent folder structures and more difficult in flat structures.
-
     ```coffeescript
 ###*
 # recommended
@@ -2224,12 +2146,11 @@ sessions.routes.js
 session - (detail.html)
 session - (detail.controller.js)
 
-```
+    ```
 
       ![Sample App Structure](https://raw.githubusercontent.com/johnpapa/angular-styleguide/master/assets/modularity-2.png)
 
       Note: Do not structure your app using folders-by-type. This requires moving to multiple folders when working on a feature and gets unwieldy quickly as the app grows to 5, 10 or 25+ views and controllers (and other features), which makes it more difficult than folder-by-feature to locate files.
-
     ```coffeescript
 ###
 * avoid
@@ -2264,7 +2185,7 @@ speakers.html
 speaker - (detail.html)
 topnav.html
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -2340,7 +2261,6 @@ topnav.html
   - Inject code into [module configuration](https://docs.angularjs.org/guide/module#module-loading-dependencies) that must be configured before running the angular app. Ideal candidates include providers and constants.
 
     *Why?*: This makes it easier to have less places for configuration.
-
   ```coffeescript
 configure = (routerHelperProvider, exceptionHandlerProvider, toastr) ->
   #//////////////
@@ -2362,7 +2282,7 @@ configure.$inject = [
   'toastr'
 ]
 
-```
+  ```
 
 ### Run Blocks
 ###### [Style [Y171](#style-y171)]
@@ -2370,7 +2290,6 @@ configure.$inject = [
   - Any code that needs to run when an application starts should be declared in a factory, exposed via a function, and injected into the [run block](https://docs.angularjs.org/guide/module#module-loading-dependencies).
 
     *Why?*: Code directly in a run block can be difficult to test. Placing in a factory makes it easier to abstract and mock.
-
   ```coffeescript
 runBlock = (authenticator, translator) ->
   authenticator.initialize()
@@ -2383,7 +2302,7 @@ runBlock.$inject = [
   'translator'
 ]
 
-```
+  ```
 
 **[Back to top](#table-of-contents)**
 
@@ -2414,7 +2333,6 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
   - Write a set of tests for every story. Start with an empty test and fill them in as you write the code for the story.
 
     *Why?*: Writing the test descriptions helps clearly define what your story will do, will not do, and how you can measure success.
-
     ```coffeescript
 it 'should have Avengers controller', ->
   # TODO
@@ -2430,7 +2348,7 @@ it 'should return Avengers via XHR', ->
   return
 # and so on
 
-```
+    ```
 
 ### Testing Library
 ###### [Style [Y191](#style-y191)]
@@ -2453,7 +2371,6 @@ it 'should return Avengers via XHR', ->
     *Why?*: Some IDE's are beginning to integrate with Karma, such as [WebStorm](http://www.jetbrains.com/webstorm/) and [Visual Studio](http://visualstudiogallery.msdn.microsoft.com/02f47876-0e7a-4f6c-93f8-1af5d5189225).
 
     *Why?*: Karma works well with task automation leaders such as [Grunt](http://www.gruntjs.com) (with [grunt-karma](https://github.com/karma-runner/grunt-karma)) and [Gulp](http://www.gulpjs.com). When using Gulp, use [Karma](https://github.com/karma-runner/karma) directly and not with a plugin as the API can be called directly.
-
     ```coffeescript
 ### recommended ###
 
@@ -2494,7 +2411,7 @@ startTests = (singleRun, done) ->
   }, karmaCompleted
   return
 
-```
+    ```
 
 ### Stubbing and Spying
 ###### [Style [Y193](#style-y193)]
@@ -2529,11 +2446,10 @@ startTests = (singleRun, done) ->
   - Relax the rules on your test code to allow for common globals such as `describe` and `expect`. Relax the rules for expressions, as Mocha uses these.
 
     *Why?*: Your tests are code and require the same attention and code quality rules as all of your production code. However, global variables used by the testing framework, for example, can be relaxed by including this in your test specs.
-
     ```coffeescript
 ### jshint -W117, -W030 ###
 
-```
+    ```
     Or you can add the following to your JSHint Options file.
 
     ```javascript
@@ -2615,7 +2531,6 @@ startTests = (singleRun, done) ->
     *Why?*: You can generate (and regenerate) documentation from your code, instead of writing it from scratch.
 
     *Why?*: Provides consistency using a common industry tool.
-
     ```coffeescript
 ###*
 # Logger Factory
@@ -2652,7 +2567,7 @@ do ->
   angular.module('app').factory 'logger', logger
   return
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -2831,7 +2746,6 @@ do ->
   - Create an Angular Constant for vendor libraries' global variables.
 
     *Why?*: Provides a way to inject vendor libraries that otherwise are globals. This improves code testability by allowing you to more easily know what the dependencies of your components are (avoids leaky abstractions). It also allows you to mock these dependencies, where it makes sense.
-
     ```coffeescript
 # constants.js
 
@@ -2842,7 +2756,7 @@ do ->
   angular.module('app.core').constant('toastr', toastr).constant 'moment', moment
   return
 
-```
+    ```
 
 ###### [Style [Y241](#style-y241)]
 
@@ -2853,7 +2767,6 @@ do ->
     *Why?*: Constants can be injected into any angular component, including providers.
 
     *Why?*: When an application is separated into modules that may be reused in other applications, each stand-alone module should be able to operate on its own including any dependent constants.
-
     ```coffeescript
 # Constants used by the entire app
 angular.module('app.core').constant 'moment', moment
@@ -2862,7 +2775,7 @@ angular.module('app.sales').constant 'events',
   ORDER_CREATED: 'event_order_created'
   INVENTORY_DEPLETED: 'event_inventory_depleted'
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -2878,7 +2791,6 @@ Use file templates or snippets to help follow consistent styles and patterns. He
     - Place it in your Packages folder
     - Restart Sublime
     - In a JavaScript file type these commands followed by a `TAB`
-
     ```coffeescript
 ngcontroller
 # creates an Angular controller
@@ -2893,7 +2805,7 @@ ngservice
 ngfilter
 # creates an Angular filter
 
-```
+    ```
 
 ### Visual Studio
 ###### [Style [Y251](#style-y251)]
@@ -2914,7 +2826,6 @@ ngfilter
     - Choose the `Import Settings` menu option
     - Select the file and click `OK`
     - In a JavaScript file type these commands followed by a `TAB`:
-
     ```coffeescript
 ng - c
 # creates an Angular controller
@@ -2923,7 +2834,7 @@ ng - f
 ng - m
 # creates an Angular module
 
-```
+    ```
 
 ### Atom
 ###### [Style [Y253](#style-y253)]
@@ -2938,7 +2849,6 @@ ng - m
     - Click 'Install' to install the package
 
   - In a JavaScript file type these commands followed by a `TAB`
-
     ```coffeescript
 ngcontroller
 # creates an Angular controller
@@ -2953,7 +2863,7 @@ ngservice
 ngfilter
 # creates an Angular filter
 
-```
+    ```
 
 ### Brackets
 ###### [Style [Y254](#style-y254)]
@@ -2968,7 +2878,6 @@ ngfilter
     - Click `Start Import`
 
   - In a JavaScript file type these commands followed by a `TAB`
-
     ```coffeescript
 # These are full file snippets containing an IIFE
 ngcontroller
@@ -2997,7 +2906,7 @@ ngroute
 ngtranslate
 # uses $translate service with its promise
 
-```
+    ```
 
 ### vim
 ###### [Style [Y255](#style-y255)]
@@ -3013,7 +2922,6 @@ ngtranslate
     - Download the [vim Angular UltiSnips snippets](assets/vim-angular-ultisnips?raw=true)
     - set [UltiSnips](https://github.com/SirVer/ultisnips)
     - copy snippets to UltiSnips directory
-
     ```coffeescript
 ngcontroller
 # creates an Angular controller
@@ -3028,7 +2936,7 @@ ngservice
 ngfilter
 # creates an Angular filter
 
-```
+    ```
 
 ### Visual Studio Code
 
@@ -3038,7 +2946,6 @@ ngfilter
 
     - Download the [VS Code Angular snippets](assets/vscode-snippets/javascript.json?raw=true)
     - copy snippets to snippet directory, or alternatively copy and paste the snippets into your existing ones
-
     ```coffeescript
 ngcontroller
 # creates an Angular controller
@@ -3051,7 +2958,7 @@ ngmodule
 ngservice
 # creates an Angular service
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -3093,7 +3000,6 @@ Client-side routing is important for creating a navigation flow between views an
     *Why?*: The syntax is quite similar to the Angular router and is easy to migrate to UI Router.
 
   - Note: You can use a provider such as the `routerHelperProvider` shown below to help configure states across files, during the run phase.
-
     ```coffeescript
 # customers.routes.js
 
@@ -3114,8 +3020,7 @@ getStates = ->
 
 angular.module('app.customers').run appRun
 
-```
-
+    ```
     ```coffeescript
 # routerHelperProvider.js
 
@@ -3160,7 +3065,7 @@ routerHelperProvider.$inject = [
   '$urlRouterProvider'
 ]
 
-```
+    ```
 
 ###### [Style [Y271](#style-y271)]
 
@@ -3186,7 +3091,6 @@ Use [Gulp](http://gulpjs.com) or [Grunt](http://gruntjs.com) for creating automa
     *Why?*: Angular needs the module definitions to be registered before they are used.
 
     *Why?*: Naming modules with a specific pattern such as `*.module.js` makes it easy to grab them with a glob and list them first.
-
     ```coffeescript
 clientApp = './src/client/app/'
 # Always grab module files first
@@ -3195,7 +3099,7 @@ files = [
   clientApp + '**/*.js'
 ]
 
-```
+    ```
 
 **[Back to top](#table-of-contents)**
 
