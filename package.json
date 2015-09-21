@@ -1,0 +1,23 @@
+{
+  "name": "angular-styleguide",
+  "version": "1.0.0",
+  "description": "*Opinionated Angular style guide for teams by [@john_papa](//twitter.com/john_papa)*",
+  "main": "convert.coffee",
+  "scripts": {
+		"convert": "(coffee --compile --output bin convert.coffee); node bin/convert.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WrapMedia/angular-styleguide.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WrapMedia/angular-styleguide/issues"
+  },
+  "homepage": "https://github.com/WrapMedia/angular-styleguide#readme",
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "js2coffee": "^2.1.0"
+  }
+}
